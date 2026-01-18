@@ -1,0 +1,55 @@
+import {
+    Controller,
+    Get,
+    Post,
+    Query,
+    Param,
+    Body,
+    UseGuards,
+} from "@nestjs/common";
+import { BankingService } from "./banking.service";
+import type {
+    GetAccountsHttpRequest,
+    GetAccountByIdHttpRequest,
+} from "./contracts/http/bank_account.dto";
+import type {
+    GetOperationsHttpRequest,
+    CreateOperationHttpRequest,
+} from "./contracts/http/operation.dto";
+// import { JwtAuthGuard } from "../guards/jwt-auth.guard"; // If you want to protect endpoints
+
+@Controller("banking")
+export class BankingHttpController {
+    constructor(private readonly bankingService: BankingService) {}
+
+    @Get("accounts")
+    // @UseGuards(JwtAuthGuard)
+    async getAccounts(@Query() query: GetAccountsHttpRequest) {
+        return this.bankingService.getAccounts(query);
+    }
+
+    @Get("accounts/:accountId")
+    // @UseGuards(JwtAuthGuard)
+    async getAccountById(
+        @Param("accountId") accountId: string,
+        @Query("userId") userId: string,
+    ) {
+        const request: GetAccountByIdHttpRequest = {
+            accountId: parseInt(accountId, 10),
+            userId: parseInt(userId, 10),
+        };
+        return this.bankingService.getAccountById(request);
+    }
+
+    @Get("operations")
+    // @UseGuards(JwtAuthGuard)
+    async getOperations(@Query() query: GetOperationsHttpRequest) {
+        return this.bankingService.getOperations(query);
+    }
+
+    @Post("operations")
+    // @UseGuards(JwtAuthGuard)
+    async createOperation(@Body() body: CreateOperationHttpRequest) {
+        return this.bankingService.createOperation(body);
+    }
+}

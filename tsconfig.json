@@ -21,7 +21,6 @@
         "forceConsistentCasingInFileNames": true,
         "noImplicitAny": false,
         "strictBindCallApply": false,
-        "noFallthroughCasesInSwitch": false,
         "strict": true,
         "noEmitOnError": true,
         "noFallthroughCasesInSwitch": true,
