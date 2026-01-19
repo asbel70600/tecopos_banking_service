@@ -7,7 +7,6 @@ import { join } from "node:path";
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
 
-    // Add validation pipe for HTTP endpoints
     app.useGlobalPipes(
         new ValidationPipe({
             whitelist: true,
@@ -16,7 +15,6 @@ async function bootstrap() {
         }),
     );
 
-    // Configure gRPC microservice
     app.connectMicroservice<MicroserviceOptions>({
         transport: Transport.GRPC,
         options: {
@@ -27,15 +25,10 @@ async function bootstrap() {
     });
 
     await app.startAllMicroservices();
-    // await app.listen(process.env["PORT"] || 3002);
 
     console.log(
         "Banking gRPC server is listening on",
         process.env["GRPC_URL"] || "0.0.0.0:50052",
     );
-    // console.log(
-    //     "Banking HTTP server is listening on",
-    //     process.env["PORT"] || 3002,
-    // );
 }
 bootstrap();
